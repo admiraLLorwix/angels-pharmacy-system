@@ -2,7 +2,7 @@
 // Verifies the Supabase JWT sent by the frontend in the Authorization header.
 // Attaches req.user and req.supabaseClient to the request for downstream use.
 
-import { supabase, supabaseAdmin } from './supabase.js';
+import { supabase, supabaseAdmin } from '../config/supabase.js';
 
 export async function requireAuth(req, res, next) {
   const authHeader = req.headers.authorization;

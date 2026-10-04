@@ -1,4 +1,4 @@
-// lib/supabase.js
+// src/confic/supabase.js
 // Two Supabase clients:
 //   supabase      — uses publishable key, respects RLS (for user-context calls)
 //   supabaseAdmin — uses secret key, bypasses RLS (for server-side admin ops)
