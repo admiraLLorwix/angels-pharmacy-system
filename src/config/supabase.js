@@ -4,7 +4,8 @@
 //   supabaseAdmin — uses secret key, bypasses RLS (for server-side admin ops)
 
 import { createClient } from '@supabase/supabase-js';
-import 'dotenv/config';
+
+process.loadEnvFile("././.env");
 
 const SUPABASE_URL         = process.env.SUPABASE_URL;
 const SUPABASE_PUBLISHABLE = process.env.SUPABASE_PUBLISHABLE_KEY;

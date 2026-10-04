@@ -5,8 +5,8 @@
 // GET  /api/auth/me      — get current user + profile
 
 import { Router } from 'express';
-import { supabase, supabaseAdmin } from '../lib/supabase.js';
-import { requireAuth } from '../lib/authMiddleware.js';
+import { supabase, supabaseAdmin } from '../config/supabase.js';
+import { requireAuth } from "../middleware/authMiddleware.js";
 
 const router = Router();
 

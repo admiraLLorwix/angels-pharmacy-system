@@ -5,8 +5,8 @@
 // PATCH /api/orders/:id/status  — update order status (staff only)
 
 import { Router } from 'express';
-import { supabaseAdmin } from '../lib/supabase.js';
-import { requireAuth, requireStaff } from '../lib/authMiddleware.js';
+import { supabaseAdmin } from '../config/supabase.js';
+import { requireAuth, requireStaff } from '../middleware/authMiddleware.js';
 
 const router = Router();
 

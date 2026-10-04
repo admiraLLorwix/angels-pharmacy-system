@@ -6,8 +6,8 @@
 // DEL  /api/medicines/:id      — deactivate medicine (admin only)
 
 import { Router } from 'express';
-import { supabaseAdmin } from '../lib/supabase.js';
-import { requireAdmin } from '../lib/authMiddleware.js';
+import { supabaseAdmin } from '../config/supabase.js';
+import { requireAdmin } from '../middleware/authMiddleware.js';
 
 const router = Router();
 

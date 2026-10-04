@@ -1,5 +1,5 @@
 // server.js — Angel's Pharmacy Express API
-import 'dotenv/config';
+// import './src/config';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -11,17 +11,32 @@ import ordersRoutes from './src/routes/orders.js';
 import prescriptionsRoutes from './src/routes/prescriptions.js';
 import adminRoutes from './src/routes/admin.js';
 
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const app = express();
 app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
+const HOSTNAME = 'localhost';
 
 /* ── SECURITY MIDDLEWARE ─────────────────────────────────────────── */
 app.use(helmet({
     contentSecurityPolicy: false
 }));
+
+app.use((req, res, next) => {
+    // Capture the absolute hostname requested by the browser
+    const host = req.get('host');
+
+    if (host === 'angelspharmacy.local') {
+        // Perform an absolute HTTP redirection to another service entirely
+        return res.redirect(301, 'http://localhost:3000/angels-pharmacy-system');
+    }
+
+    next();
+});
+
+app.listen(80, () => console.log('Proxy listener active on port 80'));
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -67,7 +82,8 @@ const __dirname = path.dirname(__filename);
 
 app.use(express.static(path.join(__dirname, '..')));
 
-app.get('*', (_req, res, next) => {
+app.get('*path', (_req, res, next) => {
+    console.log(_req.path);
     if (_req.path.startsWith('/api')) return next();
     res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
@@ -89,6 +105,6 @@ app.use((err, _req, res, _next) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Angel's Pharmacy API running on http://localhost:${PORT}`);
+    console.log(`Angel's Pharmacy API running on http://${HOSTNAME}:${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });

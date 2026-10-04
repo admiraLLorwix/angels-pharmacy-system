@@ -9,8 +9,8 @@
 // POST /api/admin/users/:id/role   — change user role (admin only)
 
 import { Router } from 'express';
-import { supabaseAdmin } from '../lib/supabase.js';
-import { requireStaff, requireAdmin } from '../lib/authMiddleware.js';
+import { supabaseAdmin } from '../config/supabase.js';
+import { requireStaff, requireAdmin } from '../middleware/authMiddleware.js';
 
 const router = Router();
 
