@@ -1,4 +1,4 @@
-// lib/authMiddleware.js
+// src/auth-middleware.js
 // Verifies the Supabase JWT sent by the frontend in the Authorization header.
 // Attaches req.user and req.supabaseClient to the request for downstream use.
 

@@ -1,7 +1,7 @@
 {
   "name": "angels-pharmacy-system",
   "version": "1.0.0",
-  "description": "\"# myangelspharmacy\" \r \"# myangelspharmacy\"",
+  "description": "",
   "homepage": "https://github.com/admiraLLorwix/angels-pharmacy-system#readme",
   "bugs": {
     "url": "https://github.com/admiraLLorwix/angels-pharmacy-system/issues"
@@ -27,6 +27,6 @@
     "multer": "^2.4.0"
   },
   "devDependencies": {
-    "supabase": "^2.119.0"
+    "supabase": "^2.120.0"
   }
 }

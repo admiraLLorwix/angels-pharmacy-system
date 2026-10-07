@@ -7,7 +7,7 @@
 
 import { Router } from 'express';
 import { supabaseAdmin } from '../config/supabase.js';
-import { requireAdmin } from '../middleware/authMiddleware.js';
+import { requireAdmin } from '../middleware/auth-middleware.js';
 
 const router = Router();
 

@@ -1,4 +1,4 @@
-// routes/auth.js
+// src/routes/auth.js
 // POST /api/auth/signup  — create account
 // POST /api/auth/login   — get session tokens
 // POST /api/auth/logout  — invalidate session
@@ -6,7 +6,7 @@
 
 import { Router } from 'express';
 import { supabase, supabaseAdmin } from '../config/supabase.js';
-import { requireAuth } from "../middleware/authMiddleware.js";
+import { requireAuth } from "../middleware/auth-middleware.js";
 
 const router = Router();
 

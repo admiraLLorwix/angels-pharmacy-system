@@ -24,17 +24,17 @@ app.use(helmet({
     contentSecurityPolicy: false
 }));
 
-app.use((req, res, next) => {
-    // Capture the absolute hostname requested by the browser
-    const host = req.get('host');
+// app.use((req, res, next) => {
+//     // Capture the absolute hostname requested by the browser
+//     const host = req.get('host');
 
-    if (host === 'angelspharmacy.local') {
-        // Perform an absolute HTTP redirection to another service entirely
-        return res.redirect(301, 'http://localhost:3000/angels-pharmacy-system');
-    }
+//     if (host === 'angelspharmacy.local') {
+//         // Perform an absolute HTTP redirection to another service entirely
+//         return res.redirect(301, 'http://localhost:3000/angels-pharmacy-system');
+//     }
 
-    next();
-});
+//     next();
+// });
 
 app.listen(80, () => console.log('Proxy listener active on port 80'));
 
@@ -44,7 +44,7 @@ app.use(cors({
         const allowed = (process.env.ALLOWED_ORIGIN || '').split(',').map(o => o.trim());
         if (allowed.includes(origin)) return callback(null, true);
         if (process.env.NODE_ENV === 'development' &&
-            (origin.includes('localhost') || origin.includes('127.0.0.1'))) {
+            (origin.includes('localhost') || origin.includes('127.0.0.1') || origin.includes('.local'))) {
             return callback(null, true);
         }
         callback(new Error('Not allowed by CORS'));
@@ -80,12 +80,12 @@ app.use('/api/admin', adminRoutes);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(express.static(path.join(__dirname, '..')));
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('*path', (_req, res, next) => {
+app.get('/', (_req, res, next) => {
     console.log(_req.path);
     if (_req.path.startsWith('/api')) return next();
-    res.sendFile(path.join(__dirname, '..', 'index.html'));
+    res.sendFile(path.join(__dirname, '/public/index.html'));
 });
 
 /* ── HEALTH CHECK ────────────────────────────────────────────────── */
@@ -100,11 +100,13 @@ app.use((_req, res) => {
 
 /* ── ERROR HANDLER ───────────────────────────────────────────────── */
 app.use((err, _req, res, _next) => {
+    console.log("Internal server error!");
     console.error(err);
     res.status(500).json({ error: 'Internal server error.' });
 });
 
 app.listen(PORT, () => {
+    console.log(`Server running on path ${__dirname}`);
     console.log(`Angel's Pharmacy API running on http://${HOSTNAME}:${PORT}`);
-    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`Environment: ${process.env.NODE_ENV}`);
 });

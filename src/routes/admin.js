@@ -1,4 +1,4 @@
-// routes/admin.js
+// src/routes/admin.js
 // All routes require admin or staff role.
 // GET  /api/admin/dashboard        — summary stats
 // GET  /api/admin/inventory        — stock levels across branches
@@ -10,7 +10,7 @@
 
 import { Router } from 'express';
 import { supabaseAdmin } from '../config/supabase.js';
-import { requireStaff, requireAdmin } from '../middleware/authMiddleware.js';
+import { requireStaff, requireAdmin } from '../middleware/auth-middleware.js';
 
 const router = Router();
 

@@ -1,4 +1,4 @@
-// routes/prescriptions.js
+// src/routes/prescriptions.js
 // POST /api/prescriptions         — upload prescription file (auth required)
 // GET  /api/prescriptions         — get my prescriptions (auth required)
 // GET  /api/prescriptions/pending — all pending (staff only)
@@ -7,7 +7,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import { supabaseAdmin } from '../config/supabase.js';
-import { requireAuth, requireStaff } from '../middleware/authMiddleware.js';
+import { requireAuth, requireStaff } from '../middleware/auth-middleware.js';
 
 const router = Router();
 // Store file in memory so we can upload to Supabase Storage
