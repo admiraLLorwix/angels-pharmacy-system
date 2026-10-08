@@ -24,30 +24,24 @@ app.use(helmet({
     contentSecurityPolicy: false
 }));
 
-// app.use((req, res, next) => {
-//     // Capture the absolute hostname requested by the browser
-//     const host = req.get('host');
-
-//     if (host === 'angelspharmacy.local') {
-//         // Perform an absolute HTTP redirection to another service entirely
-//         return res.redirect(301, 'http://localhost:3000/angels-pharmacy-system');
-//     }
-
-//     next();
-// });
-
-app.listen(80, () => console.log('Proxy listener active on port 80'));
+const allowedOrigins = (process.env.ALLOWED_ORIGIN || '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
 
 app.use(cors({
     origin: (origin, callback) => {
         if (!origin) return callback(null, true);
-        const allowed = (process.env.ALLOWED_ORIGIN || '').split(',').map(o => o.trim());
-        if (allowed.includes(origin)) return callback(null, true);
-        if (process.env.NODE_ENV === 'development' &&
-            (origin.includes('localhost') || origin.includes('127.0.0.1') || origin.includes('.local'))) {
+
+        const isLocalDevOrigin = process.env.NODE_ENV === 'development' &&
+            (origin.includes('localhost') || origin.includes('127.0.0.1') || origin.includes('.local'));
+
+        if (isLocalDevOrigin || allowedOrigins.includes(origin)) {
             return callback(null, true);
         }
-        callback(new Error('Not allowed by CORS'));
+
+        console.log(`Blocked CORS origin: ${origin}`);
+        return callback(null, false);
     },
     credentials: true,
 }));
