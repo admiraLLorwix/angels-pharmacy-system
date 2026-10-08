@@ -2,10 +2,10 @@
 // Verifies the Supabase JWT sent by the frontend in the Authorization header.
 // Attaches req.user and req.supabaseClient to the request for downstream use.
 
-import { supabase, supabaseAdmin } from '../config/supabase.js';
+import { supabaseAdmin } from '../config/supabase.js';
 
 export async function requireAuth(req, res, next) {
-  const authHeader = req.headers.authorization;
+  const authHeader = req. headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Missing or invalid Authorization header.' });
   }
@@ -21,15 +21,21 @@ export async function requireAuth(req, res, next) {
   // Fetch the user's profile (role, branch, etc.)
   const { data: profile, error: profileError } = await supabaseAdmin
     .from('Profiles')
-    .select('*')
+    .select('*, role:UserRole(role_name)')
     .eq('uuid', user.id)
     .single();
 
-    console.log('profile:', profile, 'error:', profileError);
+  if (profileError) {
+    console.error('Authentication profile lookup failed:', profileError);
+    return res.status(500).json({ error: 'Unable to load your profile.' });
+  }
 
-  req.user          = user;
-  req.profile       = profile || {};
-  req.accessToken   = token;
+  req.user = user;
+  req.profile = {
+    ...profile,
+    role: profile.role?.role_name || 'customer',
+  };
+  req.accessToken = token;
   next();
 }
 
