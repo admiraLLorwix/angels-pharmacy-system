@@ -15,7 +15,7 @@ import { requireStaff, requireAdmin } from '../middleware/auth-middleware.js';
 const router = Router();
 
 /* ── DASHBOARD STATS ─────────────────────────────────────────────── */
-router.get('/dashboard', requireStaff, async (req, res) => {
+router.get('/dashboard', async (req, res) => {
     const [orders, prescriptions, inventory, sales] = await Promise.all([
         supabaseAdmin.from('orders').select('status', { count: 'exact' }),
         supabaseAdmin.from('Prescription').select('status', { count: 'exact' }).eq('status', 'pending'),

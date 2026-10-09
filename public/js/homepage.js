@@ -1,11 +1,12 @@
 /* ── ✅ Auth guard — async, uses real Supabase session ── */
 let _currentUser = null;
 
-(async () => {
+async function start() {
+    debugger;
     _currentUser = await Auth.requireAuth();
     if (!_currentUser) return; // requireAuth() redirects if no session
 
-    const userProfile =  _currentUser;
+    const userProfile = _currentUser;
 
     console.log(userProfile);
 
@@ -20,7 +21,9 @@ let _currentUser = null;
     /* Load data now that we have a valid session */
     await loadMedicines();
     await loadMyOrders();
-})();
+}
+
+start();
 
 document.getElementById('year').textContent = new Date().getFullYear();
 

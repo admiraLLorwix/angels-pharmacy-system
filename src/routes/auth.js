@@ -59,8 +59,8 @@ router.post('/login', async (req, res) => {
     // Fetch the profile so the frontend knows the user's role immediately
     const { data: profile, error: profileError } = await supabaseAdmin
         .from('Profiles')
-        .select('full_name, phone, role:UserRole(role_name)')
-        .eq('uuid', data.user.id)
+        .select('full_name, phone, role')
+        .eq('id', data.user.id)
         .single();
 
     if (profileError) {
@@ -108,8 +108,8 @@ router.post('/logout', requireAuth, async (req, res) => {
 router.get('/me', requireAuth, async (req, res) => {
     const { data: profile, error } = await supabaseAdmin
         .from('Profiles')
-        .select('full_name, phone, role:UserRole(role_name)')
-        .eq('uuid', req.user.id)
+        .select('full_name, phone, role')
+        .eq('id', req.user.id)
         .single();
 
     if (error) {
@@ -136,7 +136,7 @@ router.patch('/me', requireAuth, async (req, res) => {
     const { error } = await supabaseAdmin
         .from('Profiles')
         .update(updates)
-        .eq('uuid', req.user.id);
+        .eq('id', req.user.id);
 
     if (error) return res.status(400).json({ error: error.message });
     return res.json({ message: 'Profile updated.' });
