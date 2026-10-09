@@ -195,14 +195,14 @@ document.getElementById('request-verification')?.addEventListener('click', async
     this.textContent = 'Uploading…';
 
     try {
-        const branchMap = {
+        /*const branchMap = {
             punturin: "12a814e2-f9b9-42a7-87a1-f5a66bfc5904",
             malinta: "850afc97-c7d3-4cc9-b119-deedb07fd1ac"
-        };
+        };*/
 
         const formData = new FormData();
         formData.append('prescription', file);
-        formData.append('branch_id', branchMap[branchEl.value]);
+        /*formData.append('branch_id', branchMap[branchEl.value]);*/
 
         const token = sessionStorage.getItem('ap_access_token');
         const res = await fetch('/api/prescriptions', {

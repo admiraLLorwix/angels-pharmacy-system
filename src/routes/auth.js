@@ -57,19 +57,26 @@ router.post('/login', async (req, res) => {
     if (error) return res.status(401).json({ error: error.message });
 
     // Fetch the profile so the frontend knows the user's role immediately
-    const { data: profile } = await supabaseAdmin
+    const { data: profile, error: profileError } = await supabaseAdmin
         .from('Profiles')
-        .select('full_name, phone, role, branch_id')
+        .select('full_name, phone, role:UserRole(role_name)')
         .eq('uuid', data.user.id)
         .single();
 
+    if (profileError) {
+        console.error('Login profile lookup failed:', profileError);
+        return res.status(500).json({ error: 'Unable to load your profile.' });
+    }
+
+    const { role, ...profileDetails } = profile;
     return res.json({
         access_token: data.session.access_token,
         refresh_token: data.session.refresh_token,
         user: {
             id: data.user.id,
             email: data.user.email,
-            ...profile,
+            ...profileDetails,
+            role: role?.role_name || 'customer',
         },
     });
 });
@@ -99,16 +106,23 @@ router.post('/logout', requireAuth, async (req, res) => {
 
 /* ── ME (current user) ───────────────────────────────────────────── */
 router.get('/me', requireAuth, async (req, res) => {
-    const { data: profile } = await supabaseAdmin
+    const { data: profile, error } = await supabaseAdmin
         .from('Profiles')
-        .select('full_name, phone, role_id, branch_id')
+        .select('full_name, phone, role:UserRole(role_name)')
         .eq('uuid', req.user.id)
         .single();
 
+    if (error) {
+        console.error('Current-user profile lookup failed:', error);
+        return res.status(500).json({ error: 'Unable to load your profile.' });
+    }
+
+    const { role, ...profileDetails } = profile;
     return res.json({
         uuid: req.user.id,
         email: req.user.email,
-        ...profile,
+        ...profileDetails,
+        role: role?.role_name || 'customer',
     });
 });
 
